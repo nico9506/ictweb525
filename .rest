@@ -1,0 +1,50 @@
+GET http://localhost:3000/students/ HTTP/1.1
+
+### Search student by ID
+GET http://localhost:3000/students/4 HTTP/1.1
+
+### POST 1 student
+POST http://localhost:3000/students/ HTTP/1.1
+Content-Type: application/json
+
+{
+    "name": "Vivi"
+}
+
+### Patch name by ID
+PATCH http://localhost:3000/students/1
+Content-Type: application/json
+
+{
+    "name": "Nicolas"
+}
+
+### PUT (modifies timestamp)
+PUT http://localhost:3000/students/5 HTTP/1.1
+X-API-Key: abc123
+Content-Type: application/json
+
+{
+    "name": "Patty",
+    "timestamp": "2024-08-28T13:00:00Z"
+}
+
+### Delete by ID
+DELETE http://localhost:3000/students/3 HTTP/1.1
+
+### Test UUID: Generates a random uuid
+GET http://localhost:3000/uuid HTTP/1.1
+
+### Test UUID: validates a given uuid
+GET http://localhost:3000/uuid/b64a101b-3ef8-47e4-bdf8-11040c44b17b HTTP/1.1
+
+### Test UUID: validates a given uuid
+GET http://localhost:3000/uuid/123 HTTP/1.1
+
+### Test API Key validation
+GET http://localhost:3000/student/1 HTTP/1.1
+X-API-Key: abc123
+
+### Test API Key validation
+GET http://localhost:3000/student/1 HTTP/1.1
+X-API-Key: abc

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Frontend Website</title>
+    </head>
+    <body>
+        <h1>All data from Backend</h1>
+        <div id="data"></div>
+
+        <h2>GET student by ID: 1</h2>
+        <div id="byId"></div>
+
+        <script>
+            fetch("http://127.0.0.1:3000/students")
+                .then((response) => response.json())
+                .then((data) => {
+                    document.getElementById("data").textContent =
+                        JSON.stringify(data);
+                })
+                .catch((error) => {
+                    console.error("Error fetching data:", error);
+                    document.getElementById("data").textContent =
+                        "Failed to fetch data from backend";
+                });
+
+            fetch("http://127.0.0.1:3000/students/1")
+                .then((response) => response.json())
+                .then((data) => {
+                    document.getElementById("byId").textContent =
+                        JSON.stringify(data);
+                })
+                .catch((error) => {
+                    console.error("Error fetching data:", error);
+                    document.getElementById("byId").textContent =
+                        "Failed to fetch data from backend";
+                });
+        </script>
+    </body>
+</html>
