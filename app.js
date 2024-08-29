@@ -4,12 +4,16 @@ const { v4: uuidv4, validate: uuidValidate } = require("uuid");
 // const { validate: uuidValidate } = require("uuid");
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
+const jwt = require("jsonwebtoken");
 
 const app = express();
 const port = 3000;
 const db = require("./studentsDB.js");
 
 app.use(express.json());
+
+// Secret key for JWT
+const SECRET_KEY = "nico";
 
 //CORS implementation
 const corsOptions = {
@@ -69,6 +73,34 @@ app.get("/uuid/:id", (req, res) => {
         console.log(error);
         res.status(500).json({ ERROR: error });
     }
+});
+
+// Middleware to verify JWT
+const verifyToken = (req, res, next) => {
+    const token = req.headers["authorization"];
+    if (!token) {
+        return res.status(403).send("A token is required for authentication");
+    }
+    try {
+        const decoded = jwt.verify(token, SECRET_KEY);
+        req.user = decoded;
+    } catch (err) {
+        return res.status(401).send("Invalid Token");
+    }
+    return next();
+};
+
+// Route to generate JWT
+app.post("/login", (req, res) => {
+    const { username, password } = req.body;
+    // Not validation of username and password to keep it simple.
+    const token = jwt.sign({ username }, SECRET_KEY, { expiresIn: "1h" });
+    res.json({ token });
+});
+
+// Protected route
+app.get("/protected", verifyToken, (req, res) => {
+    res.send("You have access to this is a protected route");
 });
 
 // Check API KEY
